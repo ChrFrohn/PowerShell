@@ -1,6 +1,9 @@
-﻿<#
+<#
     This script job is to set or update all the company users photo in AD and in O365, and then do a cleanup in your picture folder to remove resigned users photo
-    There is a limit on the photo that can be set in AD, thet photo size limit is 100k. You may need to reduce  the file size on the photes before running this scripts.
+    There is a limit on the photo that can be set in AD, thet photo size limit is 100kb. You may need to reduce  the file size on the photes before running this scripts.
+    - I'll recommend https://gallery.technet.microsoft.com/scriptcenter/Resize-Image-A-PowerShell-3d26ef68 to resize images using Powershell if needed.
+
+    THE PICTURE FILE HAS TO BE THE SAME NAME AS THE SAMACCOUNTNAME
 
     # Made by Christian Frohn // https://github.com/vFrohn // https://www.linkedin.com/in/frohn/
 
@@ -39,20 +42,17 @@ $StaffPictures = Get-ChildItem -File $UserPictureFolder| select BaseName
 
 Foreach ($User in $Users) 
 {
-    $Picture=$($StaffPictures.BaseName)
-    $Employee=$($User.samaccountname)
-
-    if ($Picture -eq $Employee)
-        {
-            #Set-ADUser $Employee -Replace @{thumbnailPhoto=([byte[]](Get-Content "$ADphotofolderTemp\$($Employee).jpg" -Encoding byte))} 
-            Write-Host -ForegroundColor Green "Setting Active Directory userphoto for:" $Employee
+    if ($StaffPictures.BaseName -eq $User.samaccountname)
+    {
+        Set-ADUser $User.samaccountname -Replace @{thumbnailPhoto=([byte[]](Get-Content "$UserPictureFolder\$($User.samaccountname).jpg" -Encoding byte))} 
+        Write-Host -ForegroundColor Green "Setting Active Directory userphoto for:" $User.samaccountname
         
-        }
-    elseif ($Picture -ne $Employee)
-        {
-            #Set-ADUser $Employee -Replace @{thumbnailPhoto=([byte[]](Get-Content "$TempPhoto" -Encoding byte))}
-            Write-Host -ForegroundColor Yellow "Setting temporary userphoto in Active Directory for:" $Employee
-        }
+    }
+    elseif ($StaffPictures.BaseName -ne $User.samaccountname)
+    {
+        Set-ADUser $User.samaccountname -Replace @{thumbnailPhoto=([byte[]](Get-Content "$TempPhoto" -Encoding byte))}
+        Write-Host -ForegroundColor Yellow "Setting temporary userphoto in Active Directory for:" $User.samaccountname
+    }
 }
 
 
@@ -61,18 +61,15 @@ Foreach ($User in $Users)
 
 Foreach ($User in $Users) 
 {
-    $Picture=$($StaffPictures.BaseName)
-    $Employee=$($User.samaccountname)
-
-    if ($Picture -eq $Employee)
+    if ($StaffPictures.BaseName -eq $User.samaccountname)
     {
-        Set-UserPhoto $Employee -PictureData ([System.IO.File]::ReadAllBytes("$PictureFolder\$($Employee).jpg")) -Confirm:$false 
-        Write-Host -ForegroundColor Cyan "Setting userphoto in O365 for:" $Employee
+        Set-UserPhoto $User.samaccountname -PictureData ([System.IO.File]::ReadAllBytes("$UserPictureFolder\$($User.samaccountname).jpg")) -Confirm:$false 
+        Write-Host -ForegroundColor Cyan "Setting userphoto in O365 for:" $User.samaccountname
     }
-    elseif ($Picture -ne $Employee)
+    elseif ($StaffPictures.BaseName -ne $User.samaccountname)
     {
-        #Set-UserPhoto $Employee -PictureData ([System.IO.File]::ReadAllBytes($TempPhoto)) -Confirm:$false -ErrorAction SilentlyContinue
-        Write-Host -ForegroundColor Magenta "Setting temporary userphoto in O365 for:" $Employee
+        Set-UserPhoto $User.samaccountname -PictureData ([System.IO.File]::ReadAllBytes($TempPhoto)) -Confirm:$false -ErrorAction SilentlyContinue
+        Write-Host -ForegroundColor Magenta "Setting temporary userphoto in O365 for:" $User.samaccountname
     }
 }
 
@@ -82,14 +79,12 @@ Foreach ($User in $Users)
 
 Foreach ($StaffPicture in $StaffPictures)
 {
-
-    $File=$($StaffPicture.BaseName)
-    $User = foreach ($ADuser in $OUs) { Get-ADUser -Properties * -SearchBase $ADuser -Filter "SamAccountName -eq '$File'" }
+    $User = foreach ($ADuser in $OUs) { Get-ADUser -Properties * -SearchBase $ADuser -Filter "SamAccountName -eq '$StaffPicture.BaseName'" }
    
     If ($User -eq $Null) 
     { 
-        #Move-Item "$PictureFolder\$($File).jpg" "$ResignedFolder"
-        Write-Host -ForegroundColor Gray $File "Not found - Moving photo to resgined folder"
+        Move-Item "$PictureFolder\$($StaffPicture.BaseName).jpg" "$ResignedFolder"
+        Write-Host -ForegroundColor Gray $StaffPicture.BaseName "Not found - Moving photo to resgined folder"
     }
 }
 
