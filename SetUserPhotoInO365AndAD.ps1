@@ -7,7 +7,6 @@
 
     # Made by Christian Frohn // https://github.com/vFrohn // https://www.linkedin.com/in/frohn/
 
-
     * DISCLAIMER OF WARRANTIES:
     *
     * THE SOFTWARE PROVIDED HEREUNDER IS PROVIDED ON AN "AS IS" BASIS, WITHOUT
