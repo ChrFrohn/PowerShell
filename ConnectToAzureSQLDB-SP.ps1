@@ -1,14 +1,20 @@
-Import-Module SQLServer
+Import-Module SQLServer -Verbose
 
-$clientid = "" 
-$tenantid = "" 
-$secret = "" 
+$ClientID = "" # enter application id that corresponds to the Service Principal" # Do not confuse with its display name
+$TenantID = "" # enter the tenant ID of the Service Principal
+$ClientSecret = "" #enter the secret associated with the Service Principal
 
-$request = Invoke-RestMethod -Method POST `
-           -Uri "https://login.microsoftonline.com/$tenantid/oauth2/token"`
-           -Body @{ resource="https://database.windows.net/"; grant_type="client_credentials"; client_id=$clientid; client_secret=$secret }`
+$RequestToken = Invoke-RestMethod -Method POST `
+           -Uri "https://login.microsoftonline.com/$TenantID/oauth2/token"`
+           -Body @{ resource="https://database.windows.net/"; grant_type="client_credentials"; client_id=$ClientID; client_secret=$ClientSecret }`
            -ContentType "application/x-www-form-urlencoded"
-$access_token = $request.access_token
+$AccessToken = $RequestToken.access_token
 
-Invoke-Sqlcmd -ServerInstance SERVERNAME.database.windows.net -Database DBNAME -AccessToken $access_token -query 'select * from dbo.NumberSerie where UsedBy IS NULL;'
+#SQL server, database & table information 
+$SQLServer = "ServerName.database.windows.net"
+$DBName = "DatbaseName"
+$DBTableName1 = "dbo.TableName"
 
+#Database query
+$Query = "Select * from $DBTableName1"
+Invoke-Sqlcmd -ServerInstance $SQLServer -Database $DBName -AccessToken $AccessToken -Query $Query
