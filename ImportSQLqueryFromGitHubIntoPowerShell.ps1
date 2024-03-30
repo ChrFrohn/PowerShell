@@ -14,7 +14,7 @@
     Blog: www.christianfrohn.dk
     LinkedIn: https://www.linkedin.com/in/frohn/
 .LINK
-    www.christianfrohn.dk/
+    https://www.christianfrohn.dk/2024/03/30/import-sql-query-from-github-repository-into-a-powershell-script/
 #>
 
 $Username = "" # Your GitHub username
