@@ -1,3 +1,5 @@
+# This code is realted to following blog post:
+# 
 Connect-AzAccount -Identity 
 
 $KeyVaultName = "NameOfKeyVault"
@@ -28,5 +30,5 @@ $headers = @{
 
 $url = "https://graph.microsoft.com/v1.0/users/"
 
-#Output all all users
+#Output all users
 Invoke-RestMethod -Uri $url -Headers $headers -Method Get -ErrorAction Stop  
