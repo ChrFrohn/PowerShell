@@ -5,7 +5,7 @@ $ObjectId = "itnb@kromannreumert.com"
 Import-Module Microsoft.Graph.Users
 
 # Microsoft Graph Permission scope
-$Scopes =@("User.Read.All", "User-LifeCycleInfo.Read.All")
+$Scopes = "User.Read.All", "User-LifeCycleInfo.Read.All"
 
 # Connect to the Microsoft Graph
 Connect-MgGraph -Scopes $Scopes
