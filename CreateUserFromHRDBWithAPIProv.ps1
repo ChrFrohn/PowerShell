@@ -21,6 +21,7 @@ $AccessToken = $RequestToken.access_token
 
 #SQL server info (Server name, DB, Table)
 $SQLServer = ""
+$DBName = ""
 $DBTableName = ""
 
 # SQL query to get new employees
