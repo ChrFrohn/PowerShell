@@ -21,10 +21,10 @@ $AccessToken = $RequestToken.access_token
 
 #SQL server info (Server name, DB, Table)
 $SQLServer = ""
-$DBName = ""
+$DBTableName = ""
 
 # SQL query to get new employees
-$SQLNewEmployeesQuery = "SELECT * FROM $DBName WHERE ValidFrom > '2024-05-14'"
+$SQLNewEmployeesQuery = "SELECT * FROM $DBTableName WHERE ValidFrom > '2024-05-14'"
 
 $GetEmployees = Invoke-Sqlcmd -ServerInstance $SQLServer -Database $DBName -Query $SQLNewEmployeesQuery -AccessToken $AccessToken
 
