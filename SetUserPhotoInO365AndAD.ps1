@@ -5,7 +5,7 @@
 
     THE PICTURE FILE HAS TO BE THE SAME NAME AS THE SAMACCOUNTNAME
 
-    # Made by Christian Frohn // https://github.com/vFrohn // https://www.linkedin.com/in/frohn/
+    # Made by Christian Frohn // https://github.com/ChrFrohn // https://www.linkedin.com/in/frohn/
 
     * DISCLAIMER OF WARRANTIES:
     *
