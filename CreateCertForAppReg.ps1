@@ -1,5 +1,5 @@
 $CN = "MyAppReg" #Name of your cert.
-$cert=New-SelfSignedCertificate -Subject "CN=$CN" -CertStoreLocation "Cert:\CurrentUser\My" -KeyExportPolicy Exportable -KeySpec Signature
+$cert=New-SelfSignedCertificate -Subject "CN=$CN" -CertStoreLocation "Cert:\CurrentUser\My" -KeyExportPolicy Exportable -KeySpec Signature -NotAfter (Get-Date).AddYears(5)
 
 #Thumbprint value
 $Thumbprint = $Cert.Thumbprint
