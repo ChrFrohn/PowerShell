@@ -27,7 +27,7 @@ let
             [Authorization = "Bearer " & access_token],
             [ExcludedFromCacheKey = {"Authorization"}, ODataVersion = 4, Implementation = "2.0"]
         ),
-    Users = GetAllPages("https://graph.microsoft.com/v1.0/users?$select=id,displayName,userPrincipalName,mail,assignedLicenses"),
+    Users = GetAllPages("https://graph.microsoft.com/v1.0/users?$select=id,displayName,userPrincipalName,jobTitle,department,officeLocation,employeeType,assignedLicenses"),
     #"Expanded assignedLicenses" = Table.ExpandTableColumn(Users, "assignedLicenses", {"disabledPlans", "skuId"}, {"assignedLicenses.disabledPlans", "assignedLicenses.skuId"})
 in
     #"Expanded assignedLicenses"
